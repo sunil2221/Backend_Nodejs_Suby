@@ -8,6 +8,9 @@ const productRoutes = require('./routes/productRoutes')
 const bodyParser = require("body-parser");
 const path = require('path');
 
+
+const PORT = process.env.PORT || 4000;
+
 dotEnv.config();
 
 mongoose.connect(process.env.MONGO_URL)
@@ -21,10 +24,10 @@ app.use("/product", productRoutes);
 app.use('/uploads', express.static('uploads'));
 
 app.get('/', (req, res) => {
-    res.send("root working")
+    res.send("<h1>Welcome to Suby</h1>")
 })
 
-app.listen(8080, (req, res) => {
-    console.log(`Server is running on ${8080}`);
+app.listen(PORT, (req, res) => {
+    console.log(`Server is running on ${PORT}`);
 })
 
