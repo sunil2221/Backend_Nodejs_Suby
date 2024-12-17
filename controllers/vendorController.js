@@ -11,6 +11,7 @@ const secretKey = process.env.SECRET;
 // register or signUp
 const vendorRegister = async(req, res) => {
     const { username, email, password } = req.body;
+    
     try{
         const vendorEmail = await Vendor.findOne({email});
         if(vendorEmail){
@@ -25,12 +26,13 @@ const vendorRegister = async(req, res) => {
             email,
             password: hashedPassword
         });
+
         await newVendor.save();
         res.status(201).json({message: "Vendor Register Successful"})
         console.log('registered');
     }catch(error){
-        console.log(err);
-        res.status(500).json({error: "Internal Server err"})
+        console.log(error);
+        res.status(500).json({error: "Internal Server err"});
     }
 }
 
@@ -40,7 +42,7 @@ const vendorLogin = async(req, res) => {
     try{
         const vendor= await Vendor.findOne({email});
         if (!vendor || !(await bcrypt.compare(password, vendor.password))) {
-            return res.status(401).json({error: "Invaild username and password"})
+            return res.status(401).json({error: "Invaild username and password"});
         }
         const token = jwt.sign({vendorId : vendor._id}, secretKey, {expiresIn: "24h"});
         res.status(200).json({success: "Login successful", token});
@@ -68,12 +70,12 @@ const getVendorById = async(req, res )=>{
     try{
         const vendor = await Vendor.findById(vendorId).populate("firm");
         if(!vendor){
-            return res.status(404).json({error: "Vendor not found"})
+            return res.status(404).json({error: "Vendor not found"});
         }
         res.status(200).json({vendor});
     }catch (err) {
         console.log(err);
-        res.status(500).json({error : "Internal server error"})
+        res.status(500).json({error : "Internal server error"});
     }
 }
 
